@@ -14,12 +14,21 @@ const int daylightOffset_sec = 3600;
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, ntpServer, gmtOffset_sec, daylightOffset_sec);
 
-// Define event names for each oz1 to oz10
-const char *iftttEventNames[] = {"oz1", "oz2", "oz3", "oz4", "oz5", "oz6", "oz7", "oz8", "oz9", "oz10"};
+// Define event structure for oz1, oz2, etc.
+struct Event
+{
+  const char *name;
+  int hour;
+  int minute;
+  const char *color;
+};
 
-// Define specific times (in local time) for each event (e.g., 5pm, 2pm)
-const int eventHours[] = {17, 14}; // 5pm, 2pm
-const int eventMinutes[] = {0, 0};
+// Define events with specific times and colors
+Event events[] = {
+    {"oz1", 14, 0, "red"}, // oz1 at 2pm with red color
+    {"oz2", 17, 0, "blue"} // oz2 at 5pm with blue color
+};
+
 void delayUntil(uint32_t targetTime)
 {
   uint32_t currentTime;
@@ -30,7 +39,7 @@ void delayUntil(uint32_t targetTime)
   } while (currentTime < targetTime);
 }
 
-void triggerIFTTTEvent(const char *eventName)
+void triggerIFTTTEvent(const char *eventName, const char *color)
 {
   // Create HTTP client object
   HTTPClient http;
@@ -41,9 +50,13 @@ void triggerIFTTTEvent(const char *eventName)
   url += "/with/key/";
   url += iftttApiKey;
 
+  // Create JSON payload for triggering IFTTT event with color parameter
+  String payload = "{\"value1\":\"" + String(color) + "\"}";
+
   // Send HTTP POST request to trigger IFTTT event
   http.begin(client, url);
-  int httpResponseCode = http.POST("");
+  http.addHeader("Content-Type", "application/json");
+  int httpResponseCode = http.POST(payload);
 
   // Check for successful request
   if (httpResponseCode > 0)
@@ -96,11 +109,11 @@ void setup()
   timeClient.begin();
 
   // Schedule trigger events for each oz1 to oz10
-  for (int i = 0; i < 2; i++)
-  { // Change to match the number of events
-    uint32_t eventTime = getEpochTime(eventHours[i], eventMinutes[i]);
+  for (int i = 0; i < sizeof(events) / sizeof(events[0]); i++)
+  {
+    uint32_t eventTime = getEpochTime(events[i].hour, events[i].minute);
     delayUntil(eventTime);
-    triggerIFTTTEvent(iftttEventNames[i]);
+    triggerIFTTTEvent(events[i].name, events[i].color);
   }
 }
 
