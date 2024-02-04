@@ -26,7 +26,18 @@ struct Event
 // Define events with specific times and colors
 Event events[] = {
     {"oz1", 14, 0, "red"}, // oz1 at 2pm with red color
-    {"oz2", 17, 0, "blue"} // oz2 at 5pm with blue color
+    {"oz2", 17, 0, "blue"}, // oz2 at 5pm with blue color
+    {"oz3", 17, 0, "blue"}, 
+    {"oz4", 17, 0, "blue"} ,
+    {"oz5", 17, 0, "blue"} ,
+    {"oz6", 17, 0, "blue"} ,
+    {"oz7", 17, 0, "blue"} ,
+    {"oz8", 17, 0, "blue"} ,
+    {"oz9", 17, 0, "blue"} ,
+    {"oz10", 17, 0, "blue"} ,
+    {"oz11", 17, 0, "blue"} ,
+    {"oz12", 17, 0, "blue"} ,
+    {"oz13", 17, 0, "blue"} 
 };
 
 void delayUntil(uint32_t targetTime)
@@ -109,7 +120,7 @@ void setup()
   timeClient.begin();
 
   // Schedule trigger events for each oz1 to oz10
-  for (int i = 0; i < sizeof(events) / sizeof(events[0]); i++)
+  for (unsigned int i = 0; i < sizeof(events) / sizeof(events[0]); i++)
   {
     uint32_t eventTime = getEpochTime(events[i].hour, events[i].minute);
     delayUntil(eventTime);
