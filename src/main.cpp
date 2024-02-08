@@ -159,7 +159,7 @@ void triggerIFTTTEvent(const char *eventName, const char *color)
   HTTPClient http;
   WiFiClient client;
   // Construct IFTTT webhook URL
-  String url = "https://maker.ifttt.com/trigger/";
+  String url = "http://maker.ifttt.com/trigger/";
   url += eventName;
   url += "/with/key/";
   url += iftttApiKey;
