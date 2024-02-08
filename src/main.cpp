@@ -14,30 +14,133 @@ const int daylightOffset_sec = 3600;
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, ntpServer, gmtOffset_sec, daylightOffset_sec);
 
-// Define event structure for oz1, oz2, etc.
-struct Event
-{
-  const char *name;
-  int hour;
-  int minute;
-  const char *color;
+// Define event names, timings, and colors for each oz1 to oz10
+const char *iftttEventNames[] = {"kansas1", "kansas2", "kansas3", "kansas4", "kansas5", "ozcolor", "oz6", "oz7", "oz8", "oz9", "oz10", "oz2"};
+
+const char *colors1[88] = {"WHITE", "WHITE", "", "WHITE", "", "", "", "WHITE", "WHITE", "", "WHITE", "", "WHITE", "", "", "", "WHITE", "", "WHITE", "", "WHITE", "", "", "", "WHITE", "", "WHITE", "", "WHITE", "WHITE", "", "WHITE", "", "", "WHITE", "", "WHITE", "", "", "", "", "WHITE", "", "WHITE", "", "", "WHITE", "RED", "RED", "", "RED", "", "RED", "", "", ""};
+const char *colors2[88] = {"", "", "WHITE", "WHITE", "WHITE", "", "", "", "WHITE", "", "WHITE", "WHITE", "", "WHITE", "", "", "", "", "", "WHITE", "", "", "", "WHITE", "WHITE", "", "", "", "WHITE", "", "", "", "WHITE", "WHITE", "", "WHITE", "WHITE", "WHITE", "WHITE", "RED", "", "RED", "", "RED", "", "", "RED", "", "WHITE", "RED", "", "WHITE", "RED", "WHITE", "", "GREEN", "WHITE", "WHITE", "GREEN", "WHITE", "ORANGE", "WHITE", ""};
+const char *colors3[88] = {"", "", "WHITE", "", "WHITE", "WHITE", "", "", "WHITE", "", "WHITE", "WHITE", "", "", "", "WHITE", "", "WHITE", "", "", "", "", "WHITE", "WHITE", "", "", "WHITE", "", "", "", "WHITE", "WHITE", "", "WHITE", "WHITE", "WHITE", "WHITE", "RED", "", "RED", "", "RED", "", "", "RED", "", "WHITE", "RED", "", "WHITE", "RED", "WHITE", "", "GREEN", "WHITE", "WHITE", "GREEN", "WHITE", "GREEN", "WHITE", ""};
+const char *colors4[87] = {"", "", "WHITE", "", "WHITE", "WHITE", "", "WHITE", "", "WHITE", "WHITE", "", "", "", "WHITE", "", "", "WHITE", "", "WHITE", "", "", "", "WHITE", "", "", "", "WHITE", "", "", "", "WHITE", "WHITE", "", "WHITE", "", "DIM", "DIM", "RED", "RED", "", "", "RED", "", "", "RED", "", "WHITE", "RED", "WHITE", "RED", "WHITE", "", "GREEN", "WHITE", "WHITE", "GREEN", "WHITE", "YELLOW", "WHITE", ""};
+const char *colors5[97] = {"", "", "WHITE", "", "WHITE", "WHITE", "", "WHITE", "WHITE", "", "WHITE", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "WHITE", "", "", "", "WHITE", "WHITE", "", "WHITE", "", "", "RED", "RED", "", "", "WHITE", "RED", "WHITE", "RED", "WHITE", "GREEN", "GREEN", "GREEN", "GREEN", "WHITE", "BLUE", "WHITE", ""};
+const char *colors6[50] = {"WHITE", "", "", "", "WHITE", "WHITE", "", "", "", "", "WHITE", "", "", "", "", "", "WHITE", "", "", "", "WHITE", "", "", "WHITE", "WHITE", "", "WHITE", "PURPLE", "", "PURPLE", "", "PINK", "", "PINK", "PURPLE", "", "WHITE", "ORANGE", "INDIGO", "WHITE", "", "WHITE", "WHITE", "BLUE", "WHITE", "BLUE", "WHITE", "BLUE", "YELLOW", "WHITE"};
+const char *colors7[61] = {"", "", "", "WHITE", "", "", "", "WHITE", "", "WHITE", "", "", "", "WHITE", "", "", "", "WHITE", "", "WHITE", "", "WHITE", "", "", "WHITE", "WHITE", "", "WHITE", "PURPLE", "", "PURPLE", "", "PINK", "", "PINK", "", "PURPLE", "PURPLE", "RED", "BLUE", "WHITE", "", "WHITE", "WHITE", "BLUE", "WHITE", "BLUE", "WHITE", "BLUE", "WHITE", "ORANGE", "WHITE"};
+const char *colors8[55] = {"WHITE", "", "", "", "", "", "WHITE", "", "", "", "WHITE", "", "", "", "WHITE", "", "WHITE", "", "WHITE", "", "WHITE", "", "", "WHITE", "WHITE", "", "WHITE", "PURPLE", "", "PURPLE", "PINK", "", "PINK", "", "PURPLE", "", "PURPLE", "YELLOW", "INDIGO", "WHITE", "", "WHITE", "WHITE", "BLUE", "WHITE", "BLUE", "WHITE", "BLUE", "YELLOW", "WHITE"};
+const char *colors9[55] = {"", "", "WHITE", "", "WHITE", "", "", "", "WHITE", "", "", "", "", "", "WHITE", "", "WHITE", "", "WHITE", "", "WHITE", "", "", "WHITE", "WHITE", "", "WHITE", "PURPLE", "", "PURPLE", "PINK", "", "PINK", "", "PURPLE", "GREEN", "RED", "WHITE", "", "WHITE", "WHITE", "BLUE", "WHITE", "BLUE", "WHITE", "BLUE", "ORANGE", "WHITE"};
+const char *colors10[50] = {"WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "", "WHITE", "PURPLE", "", "PURPLE", "PINK", "", "PINK", "", "PURPLE", "PURPLE", "RED", "WHITE", "", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE"};
+
+// Define event colors for each event
+
+unsigned long previousMillis = 0; // Previous millis for each event
+
+// Define the timer intervals and colors
+const unsigned long timerIntervals[] = {
+    0,   // 00:00-00:28 OFF
+    28,  // 00:28-00:29 ON/OFF WHITE
+    29,  // 00:29-00:31 ON/OFF WHITE
+    31,  // 00:31-00:32 OFF
+    32,  // 00:32-00:33 ON/OFF WHITE
+    33,  // 00:33-00:34 OFF
+    34,  // 00:34-00:35 OFF
+    35,  // 00:35-00:36 OFF
+    36,  // 00:36-00:38 ON/OFF WHITE
+    38,  // 00:38-00:39 ON/OFF WHITE
+    39,  // 00:39-00:40 OFF
+    40,  // 00:40-00:42 ON WHITE
+    42,  // 00:42-00:47 OFF
+    47,  // 00:47-00:49 ON WHITE
+    49,  // 00:49-00:50 OFF
+    50,  // 00:50-00:51 OFF
+    51,  // 00:51-00:52 OFF
+    52,  // 00:52-00:53 ON WHITE
+    53,  // 00:53-00:54 OFF
+    54,  // 00:54-00:56 ON WHITE
+    56,  // 00:56-00:57 OFF
+    57,  // 00:57-00:58 ON WHITE
+    58,  // 00:58-00:59 OFF
+    59,  // 00:59-01:02 OFF
+    62,  // 01:02-01:03 ON WHITE
+    63,  // 01:03-01:04 OFF
+    64,  // 01:04-01:05 OFF
+    65,  // 01:05-01:06 OFF
+    66,  // 01:06-01:39 ON WHITE
+    99,  // 01:39-01:44 OFF
+    104, // 01:44-02:22 ON WHITE
+    142, // 02:22-02:28 OFF
+    148, // 02:28-03:08 ON WHITE
+    188, // 03:08-03:28 PAN WHITE
+    208, // 03:28-03:29 OFF
+    209, // 03:29-04:34 FLICKER WHITE
+    274, // 04:34-05:48 ON WHITE
+    348, // 05:48-05:59 DIM WHITE
+    359, // 05:59-07:07 FLICKER WHITE
+    427, // 07:07-07:51 PAN RED
+    471, // 07:51-07:57 ON RED
+    477, // 07:57-08:02 OFF
+    482, // 08:02-08:07 OFF
+    487, // 08:07-08:36 ON RED
+    516, // 08:36-09:17 ON WHITE
+    557, // 09:17-09:32 ON RED
+    572, // 09:32-09:57 ON WHITE
+    597, // 09:57-10:03 ON RED
+    603, // 10:03-10:12 ON WHITE
+    612, // 10:12-10:15 ON GREEN
+    615, // 10:15-10:24 ON WHITE
+    624, // 10:24-10:52 ON WHITE
+    652, // 10:52-10:53 ON GREEN
+    653, // 10:53-16:26 ON WHITE
+    986, // 16:26-16:30 ON RED
+    990, // 16:30-18:28 OFF
 };
 
-// Define events with specific times and colors
-Event events[] = {
-    {"oz1", 14, 0, "red"}, // oz1 at 2pm with red color
-    {"oz2", 17, 0, "blue"}, // oz2 at 5pm with blue color
-    {"oz3", 17, 0, "blue"}, 
-    {"oz4", 17, 0, "blue"} ,
-    {"oz5", 17, 0, "blue"} ,
-    {"oz6", 17, 0, "blue"} ,
-    {"oz7", 17, 0, "blue"} ,
-    {"oz8", 17, 0, "blue"} ,
-    {"oz9", 17, 0, "blue"} ,
-    {"oz10", 17, 0, "blue"} ,
-    {"oz11", 17, 0, "blue"} ,
-    {"oz12", 17, 0, "blue"} ,
-    {"oz13", 17, 0, "blue"} 
+const unsigned long timerIntervals2[] = {
+    0,     // 18:36
+    240,   // 18:40
+    300,   // 18:45
+    540,   // 18:49
+    720,   // 18:52
+    960,   // 18:56
+    1200,  // 19:00
+    1440,  // 19:04
+    1680,  // 19:08
+    1920,  // 19:12
+    2160,  // 19:16
+    2400,  // 19:20
+    2640,  // 19:24
+    2880,  // 19:28
+    3120,  // 19:32
+    3360,  // 19:36
+    3600,  // 19:40
+    3840,  // 19:44
+    4080,  // 19:48
+    4320,  // 19:52
+    4560,  // 19:56
+    4800,  // 20:00
+    5040,  // 20:04
+    6600,  // 20:11
+    7968,  // 22:08
+    14800, // 24:40:00
+    16080, // 24:56:00
+    16320, // 25:12:00
+    16380, // 25:13:00
+    16500, // 25:15:00
+    16740, // 25:19:00
+    16800, // 25:20:00
+    16920, // 25:22:00
+    17220, // 25:27:00
+    17280, // 25:28:00
+    17340, // 25:29:00
+    17820, // 25:37:00
+    18120, // 25:42:00
+    20940, // 29:38:00
+    21360, // 29:47:00
+    21660, // 30:07:00
+    24440, // 34:04:00
+    28760, // 39:56:00
+    30960, // 40:51:00
+    41580, // 46:31:00
+    42420, // 46:57:00
+    48180, // 48:03:00
+    49320  // 48:28:00
 };
 
 void delayUntil(uint32_t targetTime)
@@ -118,18 +221,37 @@ void setup()
 
   // Initialize NTP client
   timeClient.begin();
-
-  // Schedule trigger events for each oz1 to oz10
-  for (unsigned int i = 0; i < sizeof(events) / sizeof(events[0]); i++)
-  {
-    uint32_t eventTime = getEpochTime(events[i].hour, events[i].minute);
-    delayUntil(eventTime);
-    triggerIFTTTEvent(events[i].name, events[i].color);
-  }
 }
-
+unsigned long eventTime = 0;
 void loop()
 {
-  timeClient.update();
-  delay(1000); // Update time every second
+
+  unsigned long currentMillis = millis();
+  // Determine the current interval
+  if (currentMillis - previousMillis > 1000)
+  {
+    eventTime++;
+    for (int i = 0; i <= 60; i++)
+    {
+      if (eventTime == timerIntervals[i])
+      {
+        triggerIFTTTEvent(iftttEventNames[0], colors1[i]);
+        triggerIFTTTEvent(iftttEventNames[1], colors2[i]);
+        triggerIFTTTEvent(iftttEventNames[2], colors3[i]);
+        triggerIFTTTEvent(iftttEventNames[3], colors4[i]);
+        triggerIFTTTEvent(iftttEventNames[4], colors5[i]);
+        break;
+      }
+
+      if (eventTime == (timerIntervals[i] + timerIntervals2[i]))
+      {
+        triggerIFTTTEvent(iftttEventNames[5], colors6[i]);
+        triggerIFTTTEvent(iftttEventNames[6], colors7[i]);
+        triggerIFTTTEvent(iftttEventNames[7], colors8[i]);
+        triggerIFTTTEvent(iftttEventNames[8], colors9[i]);
+        triggerIFTTTEvent(iftttEventNames[9], colors10[i]);
+        break;
+      }
+    }
+  }
 }
