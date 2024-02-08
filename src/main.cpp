@@ -5,7 +5,7 @@
 
 const char *ssid = "YourWiFiSSID";
 const char *password = "YourWiFiPassword";
-const char *iftttApiKey = "YourIFTTTApiKey"; // Your IFTTT API key
+const char *iftttApiKey = "d5GVBgd3oJf4bXzDph1-0xdiyoIB53Zhw2FufYp6a05"; // Your IFTTT API key
 
 const char *ntpServer = "pool.ntp.org";
 const long gmtOffset_sec = 0;
@@ -223,35 +223,45 @@ void setup()
   timeClient.begin();
 }
 unsigned long eventTime = 0;
+unsigned long eventCount = 0;
 void loop()
 {
 
   unsigned long currentMillis = millis();
   // Determine the current interval
-  if (currentMillis - previousMillis > 1000)
+  if (currentMillis - previousMillis > 100)
   {
-    eventTime++;
+    eventTime++; // this keeps the counting time in seconds
+    eventCount++;
+    if (eventCount > 56)
+      eventCount = 0;
+    Serial.println(eventTime);
+    previousMillis = millis();
+
     for (int i = 0; i <= 60; i++)
     {
       if (eventTime == timerIntervals[i])
       {
-        triggerIFTTTEvent(iftttEventNames[0], colors1[i]);
-        triggerIFTTTEvent(iftttEventNames[1], colors2[i]);
-        triggerIFTTTEvent(iftttEventNames[2], colors3[i]);
-        triggerIFTTTEvent(iftttEventNames[3], colors4[i]);
-        triggerIFTTTEvent(iftttEventNames[4], colors5[i]);
+        Serial.println("triggered WiFi");
+        triggerIFTTTEvent(iftttEventNames[0], colors1[eventCount]);
+        triggerIFTTTEvent(iftttEventNames[1], colors2[eventCount]);
+        triggerIFTTTEvent(iftttEventNames[2], colors3[eventCount]);
+        triggerIFTTTEvent(iftttEventNames[3], colors4[eventCount]);
+        triggerIFTTTEvent(iftttEventNames[4], colors5[eventCount]);
         break;
       }
 
       if (eventTime == (timerIntervals[i] + timerIntervals2[i]))
       {
-        triggerIFTTTEvent(iftttEventNames[5], colors6[i]);
-        triggerIFTTTEvent(iftttEventNames[6], colors7[i]);
-        triggerIFTTTEvent(iftttEventNames[7], colors8[i]);
-        triggerIFTTTEvent(iftttEventNames[8], colors9[i]);
-        triggerIFTTTEvent(iftttEventNames[9], colors10[i]);
+        Serial.println("triggred1 WiFi");
+        triggerIFTTTEvent(iftttEventNames[5], colors6[eventCount]);
+        triggerIFTTTEvent(iftttEventNames[6], colors7[eventCount]);
+        triggerIFTTTEvent(iftttEventNames[7], colors8[eventCount]);
+        triggerIFTTTEvent(iftttEventNames[8], colors9[eventCount]);
+        triggerIFTTTEvent(iftttEventNames[9], colors10[eventCount]);
         break;
       }
+      // Serial.println(eventTime);
     }
   }
 }
