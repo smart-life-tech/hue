@@ -232,16 +232,16 @@ void loop()
   if (currentMillis - previousMillis > 100)
   {
     eventTime++; // this keeps the counting time in seconds
-    eventCount++;
-    if (eventCount > 56)
-      eventCount = 0;
-    Serial.println(eventTime);
     previousMillis = millis();
 
     for (int i = 0; i <= 60; i++)
     {
       if (eventTime == timerIntervals[i])
       {
+        eventCount++;
+        if (eventCount > 56)
+          eventCount = 0;
+        Serial.println(eventTime);
         Serial.println("triggered WiFi");
         triggerIFTTTEvent(iftttEventNames[0], colors1[eventCount]);
         triggerIFTTTEvent(iftttEventNames[1], colors2[eventCount]);
@@ -251,8 +251,12 @@ void loop()
         break;
       }
 
-      if (eventTime == (timerIntervals[i] + timerIntervals2[i]))
+      if (eventTime == (990 + timerIntervals2[i]))
       {
+        eventCount++;
+        if (eventCount > 56)
+          eventCount = 0;
+        Serial.println(eventTime);
         Serial.println("triggred1 WiFi");
         triggerIFTTTEvent(iftttEventNames[5], colors6[eventCount]);
         triggerIFTTTEvent(iftttEventNames[6], colors7[eventCount]);

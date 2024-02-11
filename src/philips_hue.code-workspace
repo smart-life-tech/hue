@@ -6,6 +6,10 @@
 		{
 			"name": "hue",
 			"path": ".."
+		},
+		{
+			"name": "powerFakorede",
+			"path": "../../powerFakorede"
 		}
 	],
 	"settings": {
