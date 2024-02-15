@@ -229,7 +229,7 @@ void loop()
 
   unsigned long currentMillis = millis();
   // Determine the current interval
-  if (currentMillis - previousMillis > 100)
+  if (currentMillis - previousMillis > 1000)
   {
     eventTime++; // this keeps the counting time in seconds
     previousMillis = millis();
@@ -241,13 +241,36 @@ void loop()
         eventCount++;
         if (eventCount > 56)
           eventCount = 0;
-        Serial.println(eventTime);
-        Serial.println("triggered WiFi");
-        triggerIFTTTEvent(iftttEventNames[0], colors1[eventCount]);
-        triggerIFTTTEvent(iftttEventNames[1], colors2[eventCount]);
-        triggerIFTTTEvent(iftttEventNames[2], colors3[eventCount]);
-        triggerIFTTTEvent(iftttEventNames[3], colors4[eventCount]);
-        triggerIFTTTEvent(iftttEventNames[4], colors5[eventCount]);
+
+        Serial.print("triggered hue light: ");
+        Serial.println(eventCount);
+        if (eventCount < sizeof(colors1) / sizeof(colors1[0]))
+        {
+          triggerIFTTTEvent(iftttEventNames[0], colors1[eventCount]);
+        }
+        if (eventCount < sizeof(colors2) / sizeof(colors2[0]))
+        {
+          triggerIFTTTEvent(iftttEventNames[1], colors2[eventCount]);
+        }
+        if (eventCount < sizeof(colors3) / sizeof(colors3[0]))
+        {
+          triggerIFTTTEvent(iftttEventNames[2], colors3[eventCount]);
+        }
+        if (eventCount < sizeof(colors4) / sizeof(colors4[0]))
+        {
+          triggerIFTTTEvent(iftttEventNames[3], colors4[eventCount]);
+        }
+        if (eventCount < sizeof(colors5) / sizeof(colors5[0]))
+        {
+          triggerIFTTTEvent(iftttEventNames[4], colors5[eventCount]);
+        }
+
+        Serial.print("triggred colors: ");
+        Serial.print(colors1[eventCount]);
+        Serial.print(colors2[eventCount]);
+        Serial.print(colors3[eventCount]);
+        Serial.print(colors4[eventCount]);
+        Serial.println(colors5[eventCount]);
         break;
       }
 
@@ -256,13 +279,34 @@ void loop()
         eventCount++;
         if (eventCount > 56)
           eventCount = 0;
-        Serial.println(eventTime);
-        Serial.println("triggred1 WiFi");
-        triggerIFTTTEvent(iftttEventNames[5], colors6[eventCount]);
-        triggerIFTTTEvent(iftttEventNames[6], colors7[eventCount]);
-        triggerIFTTTEvent(iftttEventNames[7], colors8[eventCount]);
-        triggerIFTTTEvent(iftttEventNames[8], colors9[eventCount]);
-        triggerIFTTTEvent(iftttEventNames[9], colors10[eventCount]);
+        Serial.print("triggered hue light 6 to 10: ");
+        Serial.println(eventCount);
+        if (eventCount < sizeof(colors6) / sizeof(colors6[0]))
+        {
+          triggerIFTTTEvent(iftttEventNames[5], colors6[eventCount]);
+        }
+        if (eventCount < sizeof(colors7) / sizeof(colors7[0]))
+        {
+          triggerIFTTTEvent(iftttEventNames[6], colors7[eventCount]);
+        }
+        if (eventCount < sizeof(colors8) / sizeof(colors8[0]))
+        {
+          triggerIFTTTEvent(iftttEventNames[7], colors8[eventCount]);
+        }
+        if (eventCount < sizeof(colors9) / sizeof(colors9[0]))
+        {
+          triggerIFTTTEvent(iftttEventNames[8], colors9[eventCount]);
+        }
+        if (eventCount < sizeof(colors10) / sizeof(colors10[0]))
+        {
+          triggerIFTTTEvent(iftttEventNames[9], colors10[eventCount]);
+        }
+        Serial.print("triggred colors: ");
+        Serial.print(colors1[eventCount]);
+        Serial.print(colors2[eventCount]);
+        Serial.print(colors3[eventCount]);
+        Serial.print(colors4[eventCount]);
+        Serial.println(colors5[eventCount]);
         break;
       }
       // Serial.println(eventTime);
