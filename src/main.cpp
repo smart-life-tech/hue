@@ -3,14 +3,15 @@
 #include <NTPClient.h>
 #include <WiFiUdp.h>
 
-const char *ssid = "YourWiFiSSID";
-const char *password = "YourWiFiPassword";
-const char *iftttApiKey = "d5GVBgd3oJf4bXzDph1-0xdiyoIB53Zhw2FufYp6a05"; // Your IFTTT API key
+const char *ssid = "TECNO SPARK 5 Air";
+const char *password = "1234567890#";
+const char *iftttApiKey = "d5GVBgd3oJf4bXzDph1-0xdiyoIB53Zhw2FufYp6a05"; // Your IFTTT API key5
 
 const char *ntpServer = "pool.ntp.org";
 const long gmtOffset_sec = 0;
 const int daylightOffset_sec = 3600;
-
+unsigned long eventTime = 0;
+unsigned long eventCount = 0;
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, ntpServer, gmtOffset_sec, daylightOffset_sec);
 
@@ -158,6 +159,15 @@ void triggerIFTTTEvent(const char *eventName, const char *color)
   // Create HTTP client object
   HTTPClient http;
   WiFiClient client;
+  if (strcmp(color, "") == 0)
+  {
+    // Concatenate "off" to the eventName
+    std::string eventNameStr = eventName; // Convert eventName to std::string
+    eventNameStr += "off";                // Append "off" to eventName
+    color = "0";
+    eventName = eventNameStr.c_str();
+  }
+  Serial.println(eventName);
   // Construct IFTTT webhook URL
   String url = "http://maker.ifttt.com/trigger/";
   url += eventName;
@@ -221,9 +231,13 @@ void setup()
 
   // Initialize NTP client
   timeClient.begin();
+
+  for (int i = 0; i <= 60; i++)
+  {
+    // Serial.print(timerIntervals[i]);
+  }
 }
-unsigned long eventTime = 0;
-unsigned long eventCount = 0;
+
 void loop()
 {
 
@@ -231,85 +245,90 @@ void loop()
   // Determine the current interval
   if (currentMillis - previousMillis > 1000)
   {
-    eventTime++; // this keeps the counting time in seconds
     previousMillis = millis();
 
-    for (int i = 0; i <= 60; i++)
+    delay(20);
+   // Serial.print("timer: ");
+   // Serial.println(timerIntervals[eventCount]);
+    if (eventTime == timerIntervals[eventCount])
     {
-      if (eventTime == timerIntervals[i])
+      eventCount++;
+      if (eventCount > 55)
       {
-        eventCount++;
-        if (eventCount > 56)
-          eventCount = 0;
-
-        Serial.print("triggered hue light: ");
-        Serial.println(eventCount);
-        if (eventCount < sizeof(colors1) / sizeof(colors1[0]))
-        {
-          triggerIFTTTEvent(iftttEventNames[0], colors1[eventCount]);
-        }
-        if (eventCount < sizeof(colors2) / sizeof(colors2[0]))
-        {
-          triggerIFTTTEvent(iftttEventNames[1], colors2[eventCount]);
-        }
-        if (eventCount < sizeof(colors3) / sizeof(colors3[0]))
-        {
-          triggerIFTTTEvent(iftttEventNames[2], colors3[eventCount]);
-        }
-        if (eventCount < sizeof(colors4) / sizeof(colors4[0]))
-        {
-          triggerIFTTTEvent(iftttEventNames[3], colors4[eventCount]);
-        }
-        if (eventCount < sizeof(colors5) / sizeof(colors5[0]))
-        {
-          triggerIFTTTEvent(iftttEventNames[4], colors5[eventCount]);
-        }
-
-        Serial.print("triggred colors: ");
-        Serial.print(colors1[eventCount]);
-        Serial.print(colors2[eventCount]);
-        Serial.print(colors3[eventCount]);
-        Serial.print(colors4[eventCount]);
-        Serial.println(colors5[eventCount]);
-        break;
+        eventCount = 0;
       }
 
-      if (eventTime == (990 + timerIntervals2[i]))
+      Serial.print("triggered hue light: ");
+      Serial.println(eventCount);
+      Serial.print("triggered time: ");
+      Serial.println(eventTime);
+      Serial.print("timer: ");
+      Serial.println(timerIntervals[eventCount]);
+      if (eventCount < sizeof(colors1) / sizeof(colors1[0]))
       {
-        eventCount++;
-        if (eventCount > 56)
-          eventCount = 0;
-        Serial.print("triggered hue light 6 to 10: ");
-        Serial.println(eventCount);
-        if (eventCount < sizeof(colors6) / sizeof(colors6[0]))
-        {
-          triggerIFTTTEvent(iftttEventNames[5], colors6[eventCount]);
-        }
-        if (eventCount < sizeof(colors7) / sizeof(colors7[0]))
-        {
-          triggerIFTTTEvent(iftttEventNames[6], colors7[eventCount]);
-        }
-        if (eventCount < sizeof(colors8) / sizeof(colors8[0]))
-        {
-          triggerIFTTTEvent(iftttEventNames[7], colors8[eventCount]);
-        }
-        if (eventCount < sizeof(colors9) / sizeof(colors9[0]))
-        {
-          triggerIFTTTEvent(iftttEventNames[8], colors9[eventCount]);
-        }
-        if (eventCount < sizeof(colors10) / sizeof(colors10[0]))
-        {
-          triggerIFTTTEvent(iftttEventNames[9], colors10[eventCount]);
-        }
-        Serial.print("triggred colors: ");
-        Serial.print(colors1[eventCount]);
-        Serial.print(colors2[eventCount]);
-        Serial.print(colors3[eventCount]);
-        Serial.print(colors4[eventCount]);
-        Serial.println(colors5[eventCount]);
-        break;
+        triggerIFTTTEvent(iftttEventNames[0], colors1[eventCount]);
       }
-      // Serial.println(eventTime);
+      if (eventCount < sizeof(colors2) / sizeof(colors2[0]))
+      {
+        triggerIFTTTEvent(iftttEventNames[1], colors2[eventCount]);
+      }
+      if (eventCount < sizeof(colors3) / sizeof(colors3[0]))
+      {
+        triggerIFTTTEvent(iftttEventNames[2], colors3[eventCount]);
+      }
+      if (eventCount < sizeof(colors4) / sizeof(colors4[0]))
+      {
+        triggerIFTTTEvent(iftttEventNames[3], colors4[eventCount]);
+      }
+      if (eventCount < sizeof(colors5) / sizeof(colors5[0]))
+      {
+        triggerIFTTTEvent(iftttEventNames[4], colors5[eventCount]);
+      }
+
+      Serial.print("triggred colors: ");
+      Serial.print(colors1[eventCount]);
+      Serial.print(colors2[eventCount]);
+      Serial.print(colors3[eventCount]);
+      Serial.print(colors4[eventCount]);
+      Serial.println(colors5[eventCount]);
+     
     }
+
+    if (eventTime == (990 + timerIntervals2[eventCount]))
+    {
+      eventCount++;
+      if (eventCount > 56)
+        eventCount = 0;
+      Serial.print("triggered hue light 6 to 10: ");
+      Serial.println(eventCount);
+      if (eventCount < sizeof(colors6) / sizeof(colors6[0]))
+      {
+        triggerIFTTTEvent(iftttEventNames[5], colors6[eventCount]);
+      }
+      if (eventCount < sizeof(colors7) / sizeof(colors7[0]))
+      {
+        triggerIFTTTEvent(iftttEventNames[6], colors7[eventCount]);
+      }
+      if (eventCount < sizeof(colors8) / sizeof(colors8[0]))
+      {
+        triggerIFTTTEvent(iftttEventNames[7], colors8[eventCount]);
+      }
+      if (eventCount < sizeof(colors9) / sizeof(colors9[0]))
+      {
+        triggerIFTTTEvent(iftttEventNames[8], colors9[eventCount]);
+      }
+      if (eventCount < sizeof(colors10) / sizeof(colors10[0]))
+      {
+        triggerIFTTTEvent(iftttEventNames[9], colors10[eventCount]);
+      }
+      Serial.print("triggred colors: ");
+      Serial.print(colors1[eventCount]);
+      Serial.print(colors2[eventCount]);
+      Serial.print(colors3[eventCount]);
+      Serial.print(colors4[eventCount]);
+      Serial.println(colors5[eventCount]);
+    }
+    eventTime++; // this keeps the counting time in seconds
+    Serial.println(eventTime);
   }
 }
