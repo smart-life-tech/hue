@@ -18,15 +18,15 @@ NTPClient timeClient(ntpUDP, ntpServer, gmtOffset_sec, daylightOffset_sec);
 // Define event names, timings, and colors for each oz1 to oz10
 const char *iftttEventNames[] = {"kansas1", "kansas2", "kansas3", "kansas4", "kansas5", "ozcolor", "oz6", "oz7", "oz8", "oz9", "oz10", "oz2"};
 
-const char *colors1[88] = {"WHITE", "WHITE", "", "WHITE", "", "", "", "WHITE", "WHITE", "", "WHITE", "", "WHITE", "", "", "", "WHITE", "", "WHITE", "", "WHITE", "", "", "", "WHITE", "", "WHITE", "", "WHITE", "WHITE", "", "WHITE", "", "", "WHITE", "", "WHITE", "", "", "", "", "WHITE", "", "WHITE", "", "", "WHITE", "RED", "RED", "", "RED", "", "RED", "", "", ""};
-const char *colors2[88] = {"", "", "WHITE", "WHITE", "WHITE", "", "", "", "WHITE", "", "WHITE", "WHITE", "", "WHITE", "", "", "", "", "", "WHITE", "", "", "", "WHITE", "WHITE", "", "", "", "WHITE", "", "", "", "WHITE", "WHITE", "", "WHITE", "WHITE", "WHITE", "WHITE", "RED", "", "RED", "", "RED", "", "", "RED", "", "WHITE", "RED", "", "WHITE", "RED", "WHITE", "", "GREEN", "WHITE", "WHITE", "GREEN", "WHITE", "ORANGE", "WHITE", ""};
-const char *colors3[88] = {"", "", "WHITE", "", "WHITE", "WHITE", "", "", "WHITE", "", "WHITE", "WHITE", "", "", "", "WHITE", "", "WHITE", "", "", "", "", "WHITE", "WHITE", "", "", "WHITE", "", "", "", "WHITE", "WHITE", "", "WHITE", "WHITE", "WHITE", "WHITE", "RED", "", "RED", "", "RED", "", "", "RED", "", "WHITE", "RED", "", "WHITE", "RED", "WHITE", "", "GREEN", "WHITE", "WHITE", "GREEN", "WHITE", "GREEN", "WHITE", ""};
-const char *colors4[87] = {"", "", "WHITE", "", "WHITE", "WHITE", "", "WHITE", "", "WHITE", "WHITE", "", "", "", "WHITE", "", "", "WHITE", "", "WHITE", "", "", "", "WHITE", "", "", "", "WHITE", "", "", "", "WHITE", "WHITE", "", "WHITE", "", "DIM", "DIM", "RED", "RED", "", "", "RED", "", "", "RED", "", "WHITE", "RED", "WHITE", "RED", "WHITE", "", "GREEN", "WHITE", "WHITE", "GREEN", "WHITE", "YELLOW", "WHITE", ""};
-const char *colors5[97] = {"", "", "WHITE", "", "WHITE", "WHITE", "", "WHITE", "WHITE", "", "WHITE", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "WHITE", "", "", "", "WHITE", "WHITE", "", "WHITE", "", "", "RED", "RED", "", "", "WHITE", "RED", "WHITE", "RED", "WHITE", "GREEN", "GREEN", "GREEN", "GREEN", "WHITE", "BLUE", "WHITE", ""};
-const char *colors6[50] = {"WHITE", "", "", "", "WHITE", "WHITE", "", "", "", "", "WHITE", "", "", "", "", "", "WHITE", "", "", "", "WHITE", "", "", "WHITE", "WHITE", "", "WHITE", "PURPLE", "", "PURPLE", "", "PINK", "", "PINK", "PURPLE", "", "WHITE", "ORANGE", "INDIGO", "WHITE", "", "WHITE", "WHITE", "BLUE", "WHITE", "BLUE", "WHITE", "BLUE", "YELLOW", "WHITE"};
-const char *colors7[61] = {"", "", "", "WHITE", "", "", "", "WHITE", "", "WHITE", "", "", "", "WHITE", "", "", "", "WHITE", "", "WHITE", "", "WHITE", "", "", "WHITE", "WHITE", "", "WHITE", "PURPLE", "", "PURPLE", "", "PINK", "", "PINK", "", "PURPLE", "PURPLE", "RED", "BLUE", "WHITE", "", "WHITE", "WHITE", "BLUE", "WHITE", "BLUE", "WHITE", "BLUE", "WHITE", "ORANGE", "WHITE"};
-const char *colors8[55] = {"WHITE", "", "", "", "", "", "WHITE", "", "", "", "WHITE", "", "", "", "WHITE", "", "WHITE", "", "WHITE", "", "WHITE", "", "", "WHITE", "WHITE", "", "WHITE", "PURPLE", "", "PURPLE", "PINK", "", "PINK", "", "PURPLE", "", "PURPLE", "YELLOW", "INDIGO", "WHITE", "", "WHITE", "WHITE", "BLUE", "WHITE", "BLUE", "WHITE", "BLUE", "YELLOW", "WHITE"};
-const char *colors9[55] = {"", "", "WHITE", "", "WHITE", "", "", "", "WHITE", "", "", "", "", "", "WHITE", "", "WHITE", "", "WHITE", "", "WHITE", "", "", "WHITE", "WHITE", "", "WHITE", "PURPLE", "", "PURPLE", "PINK", "", "PINK", "", "PURPLE", "GREEN", "RED", "WHITE", "", "WHITE", "WHITE", "BLUE", "WHITE", "BLUE", "WHITE", "BLUE", "ORANGE", "WHITE"};
+const char *colors1[88] = {"", "WHITE", "WHITE", "", "WHITE", "", "", "", "WHITE", "WHITE", "", "WHITE", "", "WHITE", "", "", "", "WHITE", "", "WHITE", "", "WHITE", "", "", "WHITE", "", "", "", "WHITE", "", "WHITE", "", "WHITE", "WHITE", "", "WHITE", "WHITE", "WHITE", "WHITE", "RED", "RED", "", "", "RED", "WHITE", "RED", "WHITE", "RED", "WHITE", "GREEN", "WHITE", "WHITE", "GREEN", "WHITE", "RED", "WHITE", ""};
+const char *colors2[88] = {"", "", "WHITE", "WHITE", "WHITE", "", "", "", "WHITE", "", "WHITE", "WHITE", "", "WHITE", "", "", "", "", "", "WHITE", "", "", "", "WHITE", "WHITE", "", "", "", "WHITE", "", "", "", "WHITE", "WHITE", "", "WHITE", "WHITE", "WHITE", "WHITE", "RED", "", "RED", "", "RED", "WHITE", "RED", "WHITE", "RED", "WHITE", "GREEN", "WHITE", "WHITE", "GREEN", "WHITE", "ORANGE", "WHITE", ""};
+const char *colors3[88] = {"", "", "WHITE", "", "WHITE", "WHITE", "", "", "WHITE", "", "WHITE", "WHITE", "", "", "", "WHITE", "", "WHITE", "", "", "", "", "", "WHITE", "WHITE", "", "", "", "WHITE", "", "", "", "WHITE", "WHITE", "", "WHITE", "WHITE", "WHITE", "WHITE", "RED", "", "RED", "", "RED", "WHITE", "RED", "WHITE", "RED", "WHITE", "GREEN", "WHITE", "WHITE", "GREEN", "WHITE", "GREEN", "WHITE", ""};
+const char *colors4[87] = {"", "", "WHITE", "", "WHITE", "", "WHITE", "", "WHITE", "WHITE", "", "WHITE", "", "", "", "WHITE", "", "", "", "WHITE", "", "WHITE", "", "", "WHITE", "", "", "", "WHITE", "", "", "", "WHITE", "WHITE", "", "WHITE", "", "WHITE", "WHITE", "RED", "RED", "", "", "RED", "WHITE", "RED", "WHITE", "RED", "WHITE", "GREEN", "WHITE", "WHITE", "GREEN", "WHITE", "YELLOW", "WHITE", ""};
+const char *colors5[97] = {"", "", "WHITE", "", "WHITE", "", "", "WHITE", "WHITE", "", "", "WHITE", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "WHITE", "", "", "", "WHITE", "WHITE", "", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "", "", "RED", "RED", "WHITE", "RED", "WHITE", "RED", "WHITE", "GREEN", "GREEN", "GREEN", "GREEN", "WHITE", "BLUE", "WHITE", ""};
+const char *colors6[50] = {"WHITE", "", "", "", "WHITE", "", "", "", "", "", "WHITE", "", "", "", "", "", "WHITE", "", "", "", "WHITE", "", "", "WHITE", "WHITE", "", "WHITE", "PURPLE", "", "PURPLE", "", "PINK", "", "PINK", "PURPLE", "", "WHITE", "ORANGE", "INDIGO", "WHITE", "", "WHITE", "WHITE", "BLUE", "WHITE", "BLUE", "WHITE", "BLUE", "YELLOW", "WHITE"};
+const char *colors7[61] = {"", "", "WHITE", "", "", "", "WHITE", "", "WHITE", "", "", "", "WHITE", "", "", "", "WHITE", "", "WHITE", "", "WHITE", "", "", "WHITE", "WHITE", "", "WHITE", "PURPLE", "", "PURPLE", "", "PINK", "", "PINK", "", "PURPLE", "PURPLE", "RED", "BLUE", "WHITE", "", "WHITE", "WHITE", "BLUE", "WHITE", "BLUE", "WHITE", "BLUE", "ORANGE", "WHITE"};
+const char *colors8[55] = {"WHITE", "", "", "", "", "", "WHITE", "", "", "", "WHITE", "", "", "", "WHITE", "", "WHITE", "", "WHITE", "", "WHITE", "", "", "WHITE", "WHITE", "", "WHITE", "PURPLE", "", "PURPLE", "PINK", "", "PINK", "PURPLE", "", "PURPLE", "YELLOW", "INDIGO", "WHITE", "", "WHITE", "WHITE", "BLUE", "WHITE", "BLUE", "WHITE", "BLUE", "YELLOW", "WHITE"};
+const char *colors9[55] = {"", "", "WHITE", "", "WHITE", "", "", "", "WHITE", "", "", "", "", "", "WHITE", "", "WHITE", "", "WHITE", "", "", "", "", "WHITE", "WHITE", "", "WHITE", "PURPLE", "", "PURPLE", "PINK", "", "PINK", "PURPLE", "GREEN", "RED", "WHITE", "", "WHITE", "WHITE", "BLUE", "WHITE", "BLUE", "WHITE", "BLUE", "ORANGE", "WHITE"};
 const char *colors10[50] = {"WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "", "WHITE", "PURPLE", "", "PURPLE", "PINK", "", "PINK", "", "PURPLE", "PURPLE", "RED", "WHITE", "", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE"};
 
 // Define event colors for each event
@@ -94,54 +94,56 @@ const unsigned long timerIntervals[] = {
 };
 
 const unsigned long timerIntervals2[] = {
-    0,     // 18:36
-    240,   // 18:40
-    300,   // 18:45
-    540,   // 18:49
-    720,   // 18:52
-    960,   // 18:56
-    1200,  // 19:00
-    1440,  // 19:04
-    1680,  // 19:08
-    1920,  // 19:12
-    2160,  // 19:16
-    2400,  // 19:20
-    2640,  // 19:24
-    2880,  // 19:28
-    3120,  // 19:32
-    3360,  // 19:36
-    3600,  // 19:40
-    3840,  // 19:44
-    4080,  // 19:48
-    4320,  // 19:52
-    4560,  // 19:56
-    4800,  // 20:00
-    5040,  // 20:04
-    6600,  // 20:11
-    7968,  // 22:08
-    14800, // 24:40:00
-    16080, // 24:56:00
-    16320, // 25:12:00
-    16380, // 25:13:00
-    16500, // 25:15:00
-    16740, // 25:19:00
-    16800, // 25:20:00
-    16920, // 25:22:00
-    17220, // 25:27:00
-    17280, // 25:28:00
-    17340, // 25:29:00
-    17820, // 25:37:00
-    18120, // 25:42:00
-    20940, // 29:38:00
-    21360, // 29:47:00
-    21660, // 30:07:00
-    24440, // 34:04:00
-    28760, // 39:56:00
-    30960, // 40:51:00
-    41580, // 46:31:00
-    42420, // 46:57:00
-    48180, // 48:03:00
-    49320  // 48:28:00
+    1116, // 18:36 ON WHITE
+    1120, // 18:40 OFF
+    1125, // 18:45 OFF
+    1129, // 18:49 OFF
+    1132, // 18:52 ON WHITE
+    1136, // 18:56 OFF
+    1140, // 19:00 OFF
+    1144, // 19:04 OFF
+    1148, // 19:08 OFF
+    1152, // 19:12 OFF
+    1156, // 19:16 ON WHITE
+    1160, // 19:20 OFF
+    1164, // 19:24 ON WHITE
+    1168, // 19:28 OFF
+    1172, // 19:32 OFF
+    1176, // 19:36 OFF
+    1180, // 19:40 ON WHITE
+    1184, // 19:44 OFF
+    1188, // 19:48 OFF
+    1192, // 19:52 OFF
+    1196, // 19:56 ON WHITE
+    1200, // 20:00 OFF
+    1204, // 20:04 OFF
+    1211, // 20:11 ON WHITE
+    1328, // 22:08 DIM WHITE
+    1480, // 24:40:00 OFF
+    1496, // 24:56:00 ON WHITE
+    1513, // 25:13:00 ON PURPLE
+    1514, // 25:14:00 OFF
+    1515, // 25:15:00 ON PURPLE
+    1518, // 25:18:00 OFF
+    1520, // 25:20:00 ON PINK
+    1521, // 25:21:00 OFF
+    1522, // 25:22:00 ON PINK
+    1527, // 25:27:00 ON PURPLE
+    1528, // 25:28:00 OFF
+    1529, // 25:29:00 ON WHITE
+    1537, // 25:37:00 ON ORANGE
+    1540, // 25:40:00 ON INDIGO
+    1542, // 25:42:00 ON WHITE
+    1778, // 29:38:00 OFF
+    1787, // 29:47:00 FLICKER WHITE
+    1807, // 30:07:00 ON WHITE
+    2044, // 34:04:00 ON BLUE
+    2396, // 39:56:00 ON WHITE
+    2451, // 40:51:00 ON BLUE
+    2791, // 46:31:00 ON WHITE
+    2817, // 46:57:00 ON BLUE
+    2883, // 48:03:00 ON YELLOW
+    2908, // 48:28:00 ON WHITE
 };
 
 void delayUntil(uint32_t targetTime)
@@ -248,8 +250,8 @@ void loop()
     previousMillis = millis();
 
     delay(20);
-   // Serial.print("timer: ");
-   // Serial.println(timerIntervals[eventCount]);
+    // Serial.print("timer: ");
+    // Serial.println(timerIntervals[eventCount]);
     if (eventTime == timerIntervals[eventCount])
     {
       eventCount++;
@@ -264,23 +266,23 @@ void loop()
       Serial.println(eventTime);
       Serial.print("timer: ");
       Serial.println(timerIntervals[eventCount]);
-      if (eventCount < sizeof(colors1) / sizeof(colors1[0]))
+      if (eventCount < (sizeof(colors1) / sizeof(colors1[0])))
       {
         triggerIFTTTEvent(iftttEventNames[0], colors1[eventCount]);
       }
-      if (eventCount < sizeof(colors2) / sizeof(colors2[0]))
+      if (eventCount < (sizeof(colors2) / sizeof(colors2[0])))
       {
         triggerIFTTTEvent(iftttEventNames[1], colors2[eventCount]);
       }
-      if (eventCount < sizeof(colors3) / sizeof(colors3[0]))
+      if (eventCount < (sizeof(colors3) / sizeof(colors3[0])))
       {
         triggerIFTTTEvent(iftttEventNames[2], colors3[eventCount]);
       }
-      if (eventCount < sizeof(colors4) / sizeof(colors4[0]))
+      if (eventCount < (sizeof(colors4) / sizeof(colors4[0])))
       {
         triggerIFTTTEvent(iftttEventNames[3], colors4[eventCount]);
       }
-      if (eventCount < sizeof(colors5) / sizeof(colors5[0]))
+      if (eventCount < (sizeof(colors5) / sizeof(colors5[0])))
       {
         triggerIFTTTEvent(iftttEventNames[4], colors5[eventCount]);
       }
@@ -291,33 +293,32 @@ void loop()
       Serial.print(colors3[eventCount]);
       Serial.print(colors4[eventCount]);
       Serial.println(colors5[eventCount]);
-     
     }
 
-    if (eventTime == (990 + timerIntervals2[eventCount]))
+    if (eventTime == (timerIntervals2[eventCount]))
     {
       eventCount++;
       if (eventCount > 56)
         eventCount = 0;
       Serial.print("triggered hue light 6 to 10: ");
       Serial.println(eventCount);
-      if (eventCount < sizeof(colors6) / sizeof(colors6[0]))
+      if (eventCount < (sizeof(colors6) / sizeof(colors6[0])))
       {
         triggerIFTTTEvent(iftttEventNames[5], colors6[eventCount]);
       }
-      if (eventCount < sizeof(colors7) / sizeof(colors7[0]))
+      if (eventCount < (sizeof(colors7) / sizeof(colors7[0])))
       {
         triggerIFTTTEvent(iftttEventNames[6], colors7[eventCount]);
       }
-      if (eventCount < sizeof(colors8) / sizeof(colors8[0]))
+      if (eventCount < (sizeof(colors8) / sizeof(colors8[0])))
       {
         triggerIFTTTEvent(iftttEventNames[7], colors8[eventCount]);
       }
-      if (eventCount < sizeof(colors9) / sizeof(colors9[0]))
+      if (eventCount < (sizeof(colors9) / sizeof(colors9[0])))
       {
         triggerIFTTTEvent(iftttEventNames[8], colors9[eventCount]);
       }
-      if (eventCount < sizeof(colors10) / sizeof(colors10[0]))
+      if (eventCount < (sizeof(colors10) / sizeof(colors10[0])))
       {
         triggerIFTTTEvent(iftttEventNames[9], colors10[eventCount]);
       }
