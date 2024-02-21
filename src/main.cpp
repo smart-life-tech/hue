@@ -4,7 +4,7 @@
 #include <WiFiUdp.h>
 
 const char *ssid = "TECNO SPARK 5 Air";
-const char *password = "1234567890#";
+const char *password = "1234567890#q";
 const char *iftttApiKey = "d5GVBgd3oJf4bXzDph1-0xdiyoIB53Zhw2FufYp6a05"; // Your IFTTT API key5
 
 const char *ntpServer = "pool.ntp.org";
@@ -198,6 +198,7 @@ void triggerIFTTTEvent(const char *eventName, const char *color)
     Serial.print(eventName);
     Serial.print(", error: ");
     Serial.println(httpResponseCode);
+    return;
   }
 
   // End HTTP client
