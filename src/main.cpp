@@ -16,7 +16,7 @@ WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, ntpServer, gmtOffset_sec, daylightOffset_sec);
 
 // Define event names, timings, and colors for each oz1 to oz10
-const char *iftttEventNames[] = {"kansas1", "kansas2", "kansas3", "kansas4", "kansas5", "ozcolor", "oz6", "oz7", "oz8", "oz9", "oz10", "oz2"};
+const char *iftttEventNames[] = {"kansas1", "kansas2", "kansas3", "kansas4", "kansas5", "oz6", "oz7", "oz8", "oz9", "oz10"};
 
 const char *colors1[88] = {"", "WHITE", "WHITE", "", "WHITE", "", "", "", "WHITE", "WHITE", "", "WHITE", "", "WHITE", "", "", "", "WHITE", "", "WHITE", "", "WHITE", "", "", "WHITE", "", "", "", "WHITE", "", "WHITE", "", "WHITE", "WHITE", "", "WHITE", "WHITE", "WHITE", "WHITE", "RED", "RED", "", "", "RED", "WHITE", "RED", "WHITE", "RED", "WHITE", "GREEN", "WHITE", "WHITE", "GREEN", "WHITE", "RED", "WHITE", ""};
 const char *colors2[88] = {"", "", "WHITE", "WHITE", "WHITE", "", "", "", "WHITE", "", "WHITE", "WHITE", "", "WHITE", "", "", "", "", "", "WHITE", "", "", "", "WHITE", "WHITE", "", "", "", "WHITE", "", "", "", "WHITE", "WHITE", "", "WHITE", "WHITE", "WHITE", "WHITE", "RED", "", "RED", "", "RED", "WHITE", "RED", "WHITE", "RED", "WHITE", "GREEN", "WHITE", "WHITE", "GREEN", "WHITE", "ORANGE", "WHITE", ""};
@@ -161,46 +161,79 @@ void triggerIFTTTEvent(const char *eventName, const char *color)
   // Create HTTP client object
   HTTPClient http;
   WiFiClient client;
-  if (strcmp(color, "") == 0)
+  if (1)
   {
     // Concatenate "off" to the eventName
-    std::string eventNameStr = eventName; // Convert eventName to std::string
-    eventNameStr += "off";                // Append "off" to eventName
+    // std::string eventNameStr = eventName; // Convert eventName to std::string
+    // eventNameStr = "alloff";              // Append "off" to eventName
     color = "0";
-    eventName = eventNameStr.c_str();
+    // eventName = eventNameStr.c_str();
+    // Serial.println(eventName);
+    //  Construct IFTTT webhook URL
+    String url = "http://maker.ifttt.com/trigger/";
+    url += "alloff";
+    url += "/with/key/";
+    url += iftttApiKey;
+
+    // Create JSON payload for triggering IFTTT event with color parameter
+    String payload = "{\"value1\":\"" + String(color) + "\"}";
+
+    // Send HTTP POST request to trigger IFTTT event
+    http.begin(client, url);
+    http.addHeader("Content-Type", "application/json");
+    int httpResponseCode = http.POST(payload);
+
+    // Check for successful request
+    if (httpResponseCode > 0)
+    {
+      Serial.print("IFTTT request sent for ");
+      Serial.print(eventName);
+      Serial.print(", response code: ");
+      Serial.println(httpResponseCode);
+    }
+    else
+    {
+      Serial.print("IFTTT request failed for ");
+      Serial.print(eventName);
+      Serial.print(", error: ");
+      Serial.println(httpResponseCode);
+      return;
+    }
   }
-  Serial.println(eventName);
-  // Construct IFTTT webhook URL
-  String url = "http://maker.ifttt.com/trigger/";
-  url += eventName;
-  url += "/with/key/";
-  url += iftttApiKey;
 
-  // Create JSON payload for triggering IFTTT event with color parameter
-  String payload = "{\"value1\":\"" + String(color) + "\"}";
-
-  // Send HTTP POST request to trigger IFTTT event
-  http.begin(client, url);
-  http.addHeader("Content-Type", "application/json");
-  int httpResponseCode = http.POST(payload);
-
-  // Check for successful request
-  if (httpResponseCode > 0)
   {
-    Serial.print("IFTTT request sent for ");
-    Serial.print(eventName);
-    Serial.print(", response code: ");
-    Serial.println(httpResponseCode);
-  }
-  else
-  {
-    Serial.print("IFTTT request failed for ");
-    Serial.print(eventName);
-    Serial.print(", error: ");
-    Serial.println(httpResponseCode);
-    return;
-  }
+    Serial.println(eventName);
+    // Construct IFTTT webhook URL
+    String url = "http://maker.ifttt.com/trigger/";
+    url += eventName;
+    url += "/with/key/";
+    url += iftttApiKey;
 
+    // Create JSON payload for triggering IFTTT event with color parameter
+    String payload = "{\"value1\":\"" + String(color) + "\"}";
+
+    // Send HTTP POST request to trigger IFTTT event
+    http.begin(client, url);
+    http.addHeader("Content-Type", "application/json");
+    int httpResponseCode = http.POST(payload);
+
+    // Check for successful request
+    if (httpResponseCode > 0)
+    {
+      Serial.print("IFTTT request sent for ");
+      Serial.print(eventName);
+      Serial.print(", response code: ");
+      Serial.println(httpResponseCode);
+    }
+    else
+    {
+      Serial.print("IFTTT request failed for ");
+      Serial.print(eventName);
+      Serial.print(", error: ");
+      Serial.println(httpResponseCode);
+      return;
+    }
+  }
   // End HTTP client
   http.end();
 }
@@ -246,7 +279,7 @@ void loop()
 
   unsigned long currentMillis = millis();
   // Determine the current interval
-  if (currentMillis - previousMillis > 1000)
+  if (currentMillis - previousMillis > 10000)
   {
     previousMillis = millis();
 
@@ -255,11 +288,6 @@ void loop()
     // Serial.println(timerIntervals[eventCount]);
     if (eventTime == timerIntervals[eventCount])
     {
-      eventCount++;
-      if (eventCount > 55)
-      {
-        eventCount = 0;
-      }
 
       Serial.print("triggered hue light: ");
       Serial.println(eventCount);
@@ -288,12 +316,21 @@ void loop()
         triggerIFTTTEvent(iftttEventNames[4], colors5[eventCount]);
       }
 
-      Serial.print("triggred colors: ");
+      Serial.print("triggred colors1: ");
       Serial.print(colors1[eventCount]);
+      Serial.print("triggred colors2: ");
       Serial.print(colors2[eventCount]);
+      Serial.print("triggred colors3: ");
       Serial.print(colors3[eventCount]);
+      Serial.print("triggred colors4: ");
       Serial.print(colors4[eventCount]);
+      Serial.print("triggred colors5: ");
       Serial.println(colors5[eventCount]);
+      eventCount++;
+      if (eventCount > 55)
+      {
+        eventCount = 0;
+      }
     }
 
     if (eventTime == (timerIntervals2[eventCount]))
@@ -329,6 +366,11 @@ void loop()
       Serial.print(colors3[eventCount]);
       Serial.print(colors4[eventCount]);
       Serial.println(colors5[eventCount]);
+      eventCount++;
+      if (eventCount > 55)
+      {
+        eventCount = 0;
+      }
     }
     eventTime++; // this keeps the counting time in seconds
     Serial.println(eventTime);
