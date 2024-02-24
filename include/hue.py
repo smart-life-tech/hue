@@ -1,12 +1,18 @@
 import requests
 import time
+from http.server import BaseHTTPRequestHandler, HTTPServer
+from urllib.parse import urlparse
+
 # Define event names and colors for each oz1 to oz10
 ifttt_event_names = ["kansas1", "kansas2", "kansas3", "kansas4", "kansas5", "ozcolor", "oz6", "oz7", "oz8", "oz9", "oz10", "oz2"]
 ifftt_off=["k1off,k2off,k3off,k4off,k5off","o6off,o7off,oz8off,o9off,oz10off"]
 current_millis = int(round(time.time() * 1000))
-previous_millis = 0
+
+#previous_millis = 0
 event_count = 0
+event_counts = 0
 event_time = 0
+
 
 
 colors1= ["", "WHITE", "WHITE", "", "WHITE", "", "", "", "WHITE", "WHITE", "", "WHITE", "", "WHITE", "", "", "", "WHITE", "", "WHITE", "", "WHITE", "", "", "WHITE", "", "", "", "WHITE", "", "WHITE", "", "WHITE", "WHITE", "", "WHITE", "WHITE", "WHITE", "WHITE", "RED", "RED", "", "", "RED", "WHITE", "RED", "WHITE", "RED", "WHITE", "GREEN", "WHITE", "WHITE", "GREEN", "WHITE", "RED", "WHITE", ""],
@@ -133,6 +139,111 @@ timer_intervals2 = [
     2883, # 48:03:00 ON YELLOW
     2908, # 48:28:00 ON WHITE
 ]
+def check_and_trigger_event():
+    global event_count, event_time,event_counts
+
+    if event_time == timer_intervals[event_counts]:
+        print(f"Triggered hue light: {event_count}")
+        print(f"Triggered time: {event_time}")
+        print(f"Timer: {timer_intervals[event_count]}")
+
+        if event_count < len(colors1[0]):
+            trigger_ifttt_event(ifttt_event_names[0], colors1[0][event_count])
+        if event_count < len(colors2[0]):
+            trigger_ifttt_event(ifttt_event_names[1], colors2[0][event_count])
+        if event_count < len(colors3[0]):
+            trigger_ifttt_event(ifttt_event_names[2], colors3[0][event_count])
+        if event_count < len(colors4[0]):
+            trigger_ifttt_event(ifttt_event_names[3], colors4[0][event_count])
+        if event_count < len(colors5[0]):
+            trigger_ifttt_event(ifttt_event_names[4], colors5[0][event_count])
+
+        print(f"Triggered colors1: {colors1[0][event_count]}")
+        print(f"Triggered colors2: {colors2[0][event_count]}")
+        print(f"Triggered colors3: {colors3[0][event_count]}")
+        print(f"Triggered colors4: {colors4[0][event_count]}")
+        print(f"Triggered colors5: {colors5[0][event_count]}")
+        print("triggred event: ", ifttt_event_names[0])
+
+        event_count += 1
+        if event_count > 56:#for colors
+            event_count = 0
+            
+        event_counts += 1
+        if event_count >= len(timer_intervals) - 1:
+            event_counts = 0
+
+    if event_time == timer_intervals2[event_counts]:
+        event_count += 1
+        if event_count > 56:
+            event_count = 0
+        if event_count >= len(timer_intervals) - 1:
+            event_counts = 0
+
+        print(f"Triggered hue light 6 to 10: {event_count}")
+
+        if event_count < len(colors6[0]):
+            trigger_ifttt_event(ifttt_event_names[5], colors6[0][event_count])
+        if event_count < len(colors7[0]):
+            trigger_ifttt_event(ifttt_event_names[6], colors7[0][event_count])
+        if event_count < len(colors8[0]):
+            trigger_ifttt_event(ifttt_event_names[7], colors8[0][event_count])
+        if event_count < len(colors9[0]):
+            trigger_ifttt_event(ifttt_event_names[8], colors9[0][event_count])
+        if event_count < len(colors10[0]):
+            trigger_ifttt_event(ifttt_event_names[9], colors10[0][event_count])
+
+        #print(f"Triggered colors: {colors6[event_count]} {colors7[event_count]} {colors8[event_count]} {colors9[event_count]} {colors10[event_count]}")
+
+
+    event_time += 1
+    print(event_time)
+#code starts here
+  
+def timer():
+    global previous_millis,event_counts
+    previous_millis=0
+    event_count = 0
+    event_counts = 0
+    event_time = 0
+    while(startup==True):
+        current_millis = int(round(time.time() * 1000))
+        if current_millis - previous_millis > 1000:
+            previous_millis = current_millis
+            time.sleep(0.02)
+            check_and_trigger_event()
+            
+class RequestHandler(BaseHTTPRequestHandler):
+    def _set_headers(self, status_code=200):
+        self.send_response(status_code)
+        self.send_header('Content-type', 'text/html')
+        self.end_headers()
+
+    def do_GET(self):
+        global startup
+        parsed_path = urlparse(self.path)
+        if parsed_path.path == '/test':
+            # Run your set of Python code here
+            # For example:
+            
+            startup=True
+            print("Received a request to /test")
+            self._set_headers()
+            self.wfile.write(b"Triggered our Python codes!")
+            # Stop the server after handling the request
+            timer()
+            print("server shutdown")
+            self.server.shutdown()  # This will stop the server
+            print("server shutdown")
+        else:
+            self._set_headers(404)
+            self.wfile.write(b"Not Found")
+
+def run(server_class=HTTPServer, handler_class=RequestHandler, addr="localhost", port=14999):
+    server_address = (addr, port)
+    httpd = server_class(server_address, handler_class)
+    print(f"Starting server on {addr}:{port}...")
+    httpd.serve_forever()
 
 def trigger_ifttt_event(event_name, color):
     # Concatenate "off" to the eventName
@@ -175,67 +286,13 @@ def trigger_ifttt_event(event_name, color):
 
     print("triggred event: ", event_name)
 
-def check_and_trigger_event():
-    global event_count, event_time
-
-    if event_time == timer_intervals[event_count]:
-        print(f"Triggered hue light: {event_count}")
-        print(f"Triggered time: {event_time}")
-        print(f"Timer: {timer_intervals[event_count]}")
-
-        if event_count < len(colors1):
-            trigger_ifttt_event(ifttt_event_names[0], colors1[0][event_count])
-        if event_count < len(colors2):
-            trigger_ifttt_event(ifttt_event_names[1], colors2[0][event_count])
-        if event_count < len(colors3):
-            trigger_ifttt_event(ifttt_event_names[2], colors3[0][event_count])
-        if event_count < len(colors4):
-            trigger_ifttt_event(ifttt_event_names[3], colors4[0][event_count])
-        if event_count < len(colors5):
-            trigger_ifttt_event(ifttt_event_names[4], colors5[0][event_count])
-
-        print(f"Triggered colors1: {colors1[0][event_count]}")
-        print(f"Triggered colors2: {colors2[0][event_count]}")
-        print(f"Triggered colors3: {colors3[0][event_count]}")
-        print(f"Triggered colors4: {colors4[0][event_count]}")
-        print(f"Triggered colors5: {colors5[0][event_count]}")
-        print("triggred event: ", ifttt_event_names[0])
-
-        event_count += 1
-        if event_count >= len(timer_intervals) - 1:
-            event_count = 0
-
-    if event_time == timer_intervals2[event_count]:
-        event_count += 1
-        if event_count > 56:
-            event_count = 0
-
-        print(f"Triggered hue light 6 to 10: {event_count}")
-
-        if event_count < len(colors6):
-            trigger_ifttt_event(ifttt_event_names[5], colors6[0][event_count])
-        if event_count < len(colors7):
-            trigger_ifttt_event(ifttt_event_names[6], colors7[0][event_count])
-        if event_count < len(colors8):
-            trigger_ifttt_event(ifttt_event_names[7], colors8[0][event_count])
-        if event_count < len(colors9):
-            trigger_ifttt_event(ifttt_event_names[8], colors9[0][event_count])
-        if event_count < len(colors10):
-            trigger_ifttt_event(ifttt_event_names[9], colors10[0][event_count])
-
-        #print(f"Triggered colors: {colors6[event_count]} {colors7[event_count]} {colors8[event_count]} {colors9[event_count]} {colors10[event_count]}")
-
-
-    event_time += 1
-    print(event_time)
-#code starts here
-    
+  
 url = 'https://maker.ifttt.com/trigger/alloff/with/key/d5GVBgd3oJf4bXzDph1-0xdiyoIB53Zhw2FufYp6a05'
 data = {"value1": "red"}
 headers = {"Content-Type": "application/json"}
 
 response = requests.post(url, json=data, headers=headers)
-
+print(len(colors1[0]))
 if response.status_code == 200:
     print("IFTTT event triggered successfully.")
 else:
@@ -244,8 +301,7 @@ else:
 
 # Example usage:
 while True:
-    current_millis = int(round(time.time() * 1000))
-    if current_millis - previous_millis > 1000:
-        previous_millis = current_millis
-        time.sleep(0.02)
-        check_and_trigger_event()
+    startup=False
+    run()
+    print(startup)
+    
